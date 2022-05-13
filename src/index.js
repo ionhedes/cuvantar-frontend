@@ -3,19 +3,19 @@ import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import HomePage from './pages/HomePage';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Auth from "./pages/AuthPage";
 import LessonsPage from "./pages/LessonsPage";
 import ReviewPage from "./pages/ReviewPage";
 import SummaryPage from "./pages/SummaryPage";
 import FlashcardPage from "./pages/FlashcardPage";
 import AllFlashcardsPage from "./pages/AllFlashcardsPage";
+import AuthPage from "./pages/AuthPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
       <BrowserRouter>
           <Routes>
-              <Route path="/" element={<Auth />} />
+              <Route path="/" element={<AuthPage />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/lessons" element={<LessonsPage />} />
               <Route path="/review" element={<ReviewPage />} />

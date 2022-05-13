@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import {Typography} from "@mui/material";
 
-class Auth extends React.Component {
+class AuthPage extends React.Component {
     render() {
         return (
             <Typography variant="h1">Auth page</Typography>
@@ -9,4 +9,4 @@ class Auth extends React.Component {
     }
 }
 
-export default Auth;
+export default AuthPage;
