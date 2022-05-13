@@ -4,6 +4,5 @@ export function getRecentLessonCards() {
         { word: 'luna', translation: 'moon' },
         { word: 'soare', translation: 'sun' },
         { word: 'elicopter', translation: 'helicopter' },
-        { word: 'eu', translation: 'me' }
     ]
 }

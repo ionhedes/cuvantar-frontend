@@ -2,7 +2,7 @@ import FlashcardGrid from '../components/FlashcardGrid';
 import React from 'react';
 import SearchableNavbar from "../components/SearchableNavbar";
 import HomepageCard from "../components/HomepageCard";
-import {Divider, Grid, Typography} from "@mui/material";
+import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
 import {getRecentLessonCards} from "../styles/LessonService";
@@ -34,7 +34,7 @@ class HomePage extends React.Component {
         return (
             <div className="Home">
                 <SearchableNavbar></SearchableNavbar>
-                <Grid container direction="column" spacing={5}>
+                <Grid container direction="column" spacing={5} alignItems="center">
                     <Grid item container spacing={3} justifyContent="center" mt={5}>
                         <Grid item>
                             <HomepageCard name="Lessons" />
@@ -42,9 +42,6 @@ class HomePage extends React.Component {
                         <Grid item>
                             <HomepageCard name="Reviews"/>
                         </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Divider variant="middle" />
                     </Grid>
                     <Grid item container justifyContent="center">
                         <Typography variant="h5" component="div">
