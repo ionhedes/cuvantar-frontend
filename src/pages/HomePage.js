@@ -1,4 +1,3 @@
-import '../styles/App.css';
 import FlashcardGrid from '../components/FlashcardGrid';
 import React from 'react';
 import SearchableNavbar from "../components/SearchableNavbar";
@@ -6,7 +5,7 @@ import HomepageCard from "../components/HomepageCard";
 import {Divider, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 
-class Home extends React.Component {
+class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -67,4 +66,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default HomePage;
