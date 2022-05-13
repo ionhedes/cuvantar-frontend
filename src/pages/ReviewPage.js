@@ -1,4 +1,3 @@
-import '../styles/App.css';
 import React from 'react';
 import Navbar from "../components/Navbar";
 import {Grid, Typography} from "@mui/material";
