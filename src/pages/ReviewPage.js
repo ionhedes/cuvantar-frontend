@@ -4,6 +4,7 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import ReviewBox from "../components/ReviewBox";
 import getReviewGenerator from "../services/ReviewService";
+import {Link, useNavigate} from "react-router-dom";
 
 class ReviewPage extends React.Component {
     constructor(props) {
@@ -31,8 +32,9 @@ class ReviewPage extends React.Component {
         let nextReview = this.reviewGenerator.next();
         if (nextReview.done === true) {
             alert("answers " + this.answers);
+            this.props.router.navigate("/summary");
         } else {
-            this.setState({currentReview: nextReview})
+            this.setState({currentReview: nextReview});
         }
     }
 
@@ -54,7 +56,11 @@ class ReviewPage extends React.Component {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained">Finish Session</Button>
+                        <Link to="/home" style={{ textDecoration: "none" }}>
+                            <Button variant="contained">
+                                Finish session
+                            </Button>
+                        </Link>
                     </Grid>
                 </Grid>
             </Grid>
@@ -71,11 +77,11 @@ class ReviewPage extends React.Component {
                     </Typography>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt='1vh'>
-                    <Button
-                        variant="contained"
-                    >
-                        Go back home
-                    </Button>
+                    <Link to="/home" style={{ textDecoration: "none" }}>
+                        <Button variant="contained">
+                            Go back home
+                        </Button>
+                    </Link>
                 </Grid>
             </Grid>
         )
@@ -89,4 +95,19 @@ class ReviewPage extends React.Component {
     }
 }
 
-export default ReviewPage;
+function attachRouter(Component) {
+    function ComponentWithRouter(props) {
+        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
+
+        return (
+            <Component
+                {...props}  // previous props
+                router = {{ navigate }} // router - attached prop;
+            />
+        );
+    }
+
+    return ComponentWithRouter;
+}
+
+export default attachRouter(ReviewPage);
