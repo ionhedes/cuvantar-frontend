@@ -3,6 +3,7 @@ import {CardActionArea, Typography} from "@mui/material";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
+import {Link} from "react-router-dom";
 
 class HomepageCard extends React.Component {
     constructor(props) {
@@ -12,7 +13,6 @@ class HomepageCard extends React.Component {
     }
 
     handleOnClick(event) {
-        alert("M-ai apasat.");
     }
 
     render() {
@@ -23,9 +23,11 @@ class HomepageCard extends React.Component {
                         onClick={this.handleOnClick}
                     >
                         <CardContent>
-                            <Typography variant="h5" component="div">
-                                {this.props.name}
-                            </Typography>
+                            <Link to="/lessons" style={{ textDecoration: 'none' }}>
+                                <Typography variant="h5" component="div">
+                                    {this.props.name}
+                                </Typography>
+                            </Link>
                         </CardContent>
                     </CardActionArea>
                 </Card>
