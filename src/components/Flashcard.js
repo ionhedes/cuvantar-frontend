@@ -20,7 +20,7 @@ class Flashcard extends React.Component {
                       </Typography>
                   </CardContent>
                   <CardActions>
-                      <Button>go to ..</Button>
+                      <Button>go to definition</Button>
                   </CardActions>
               </Card>
             </Box>
