@@ -5,6 +5,7 @@ import HomepageCard from "../components/HomepageCard";
 import {Divider, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
+import {getRecentLessonCards} from "../styles/LessonService";
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class HomePage extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <FlashcardGrid cards={this.cards} />
+                        <FlashcardGrid cards={getRecentLessonCards()} />
                     </Grid>
                     <Grid item container spacing={2} justifyContent="center">
                         <Grid item>
