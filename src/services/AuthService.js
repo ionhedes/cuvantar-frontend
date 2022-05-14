@@ -23,9 +23,9 @@ export function logoutUser() {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Basic ' + btoa(process.env.REACT_APP_API_CREDS),
-            'custom-token': localStorage.getItem("token")
+            'custom-token': sessionStorage.getItem("token")
         },
         mode: 'cors'
     };
-    return fetch(`http://localhost:3000/api/logout?username=${encodeURIComponent(localStorage.getItem("username"))}`, requestOptions);
+    return fetch(`http://localhost:3000/api/logout?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions);
 }

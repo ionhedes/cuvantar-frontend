@@ -3,19 +3,28 @@ import Navbar from "../components/Navbar";
 import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import ReviewBox from "../components/ReviewBox";
-import getReviewGenerator from "../services/ReviewService";
+import {getReviews, sendReviewResults} from "../services/ReviewService";
 import {Link, Navigate, useNavigate} from "react-router-dom";
+import {createGenerator} from "../services/CommonService";
 
 class ReviewPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.reviewGenerator = getReviewGenerator();
+        this.reviewGenerator = {};
+        this.state = {value: "", currentReview: {value: {front: "", back: ""}, done: true}, answers: []};
         this.answers = [];
-        this.state = {value: "", currentReview: this.reviewGenerator.next() , answers: []};
 
         this.handleChange = this.handleChange.bind(this);
         this.sendAnswer = this.sendAnswer.bind(this);
+        this.finishReviews = this.finishReviews.bind(this);
+    }
+
+    componentDidMount() {
+        getReviews().then(reviews => {
+            this.reviewGenerator = createGenerator(reviews);
+            this.setState({currentReview: this.reviewGenerator.next()});
+        });
     }
 
     isReviewQueueEmpty() {
@@ -27,20 +36,24 @@ class ReviewPage extends React.Component {
     }
 
     sendAnswer(event) {
-        this.answers = this.answers.concat(this.state.value === this.state.currentReview.value.answer);
+        this.answers = this.answers.concat(this.state.value === this.state.currentReview.value.back);
 
         let nextReview = this.reviewGenerator.next();
         if (nextReview.done === true) {
-            alert("answers " + this.answers);
-            this.props.router.navigate("/summary");
+            this.finishReviews();
         } else {
             this.setState({currentReview: nextReview});
         }
     }
 
+    finishReviews(event) {
+        sendReviewResults(this.answers);
+        this.props.router.navigate("/summary");
+    }
+
     render() {
 
-        if(localStorage.getItem("token") === null) {
+        if(sessionStorage.getItem("token") === null) {
             return <Navigate replace='true' to='/'/>
         }
 
@@ -48,7 +61,7 @@ class ReviewPage extends React.Component {
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
-                        <ReviewBox word={this.state.currentReview.value.word} onChange={this.handleChange}/>
+                        <ReviewBox word={!this.isReviewQueueEmpty() ? this.state.currentReview.value.front : ""} onChange={this.handleChange}/>
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
@@ -61,11 +74,12 @@ class ReviewPage extends React.Component {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Link to="/home" style={{ textDecoration: "none" }}>
-                            <Button variant="contained">
-                                Finish session
-                            </Button>
-                        </Link>
+                        <Button
+                            variant="contained"
+                            onClick={this.finishReviews}
+                        >
+                            Finish session
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>

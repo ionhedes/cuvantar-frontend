@@ -39,8 +39,8 @@ class AuthPage extends React.Component {
         loginUser(creds).then(res => {
             if(res.ok){
                 let token = ''
-                localStorage.setItem('username', creds.username)
-                res.json().then(data => token=data.token).then(() => localStorage.setItem('token', token))
+                sessionStorage.setItem('username', creds.username)
+                res.json().then(data => token=data.token).then(() => sessionStorage.setItem('token', token))
                 this.props.router.navigate('/home')
             }
         });
@@ -57,7 +57,7 @@ class AuthPage extends React.Component {
     }
 
     render() {
-        if(localStorage.getItem("token") !== null) {
+        if(sessionStorage.getItem("token") !== null) {
             return <Navigate replace='true' to='/home/'/>
         }
         return (

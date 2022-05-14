@@ -17,8 +17,8 @@ class Navbar extends React.Component {
     handleLogout(event) {
         logoutUser().then(res => {
             if (res.ok) {
-                localStorage.removeItem("username");
-                localStorage.removeItem("token");
+                sessionStorage.removeItem("username");
+                sessionStorage.removeItem("token");
                 this.props.router.navigate('/')
             }
         });
