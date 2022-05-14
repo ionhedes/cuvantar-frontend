@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from "@mui/material/Button";
+import {logoutUser} from "../services/AuthService";
+import {useNavigate} from "react-router-dom";
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -13,7 +15,13 @@ class Navbar extends React.Component {
     }
 
     handleLogout(event) {
-        alert("You logged out.");
+        logoutUser().then(res => {
+            if (res.ok) {
+                localStorage.removeItem("username");
+                localStorage.removeItem("token");
+                this.props.router.navigate('/')
+            }
+        });
     }
 
     render() {
@@ -46,4 +54,19 @@ class Navbar extends React.Component {
     }
 }
 
-export default Navbar;
+function attachRouter(Component) {
+    function ComponentWithRouter(props) {
+        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
+
+        return (
+            <Component
+                {...props}  // previous props
+                router = {{ navigate }} // router - attached prop;
+            />
+        );
+    }
+
+    return ComponentWithRouter;
+}
+
+export default attachRouter(Navbar);

@@ -3,7 +3,7 @@ import {Grid, TextField, Typography} from "@mui/material";
 import NavbarAuthScreen from "../components/NavbarAuthScreen";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {LoginUser, RegisterUser} from "../services/AuthService";
+import {loginUser, registerUser} from "../services/AuthService";
 import {Navigate, useNavigate} from "react-router-dom";
 
 class AuthPage extends React.Component {
@@ -36,9 +36,10 @@ class AuthPage extends React.Component {
             username: this.state.usernameLogin,
             password: this.state.passwordLogin,
         }
-        LoginUser(creds).then(res => {
+        loginUser(creds).then(res => {
             if(res.ok){
                 let token = ''
+                localStorage.setItem('username', creds.username)
                 res.json().then(data => token=data.token).then(() => localStorage.setItem('token', token))
                 this.props.router.navigate('/home')
             }
@@ -51,7 +52,7 @@ class AuthPage extends React.Component {
             password: this.state.passwordRegister,
             email: this.state.emailRegister
         }
-        RegisterUser(user)
+        registerUser(user)
         window.location.reload();
     }
 
@@ -148,6 +149,7 @@ class AuthPage extends React.Component {
         );
     }
 }
+
 function attachRouter(Component) {
     function ComponentWithRouter(props) {
         let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;

@@ -4,7 +4,7 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import ReviewBox from "../components/ReviewBox";
 import getReviewGenerator from "../services/ReviewService";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 
 class ReviewPage extends React.Component {
     constructor(props) {
@@ -39,6 +39,11 @@ class ReviewPage extends React.Component {
     }
 
     render() {
+
+        if(localStorage.getItem("token") === null) {
+            return <Navigate replace='true' to='/'/>
+        }
+
         let reviewLayout = (
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
