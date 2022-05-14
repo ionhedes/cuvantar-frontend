@@ -4,8 +4,7 @@ import Box from "@mui/material/Box";
 
 class ReviewBox extends React.Component {
     render() {
-        return ( 
-            this.props.map((card) => 
+        return (
             <Box
                 component="div"
                 sx={{display: 'flex',
@@ -19,14 +18,14 @@ class ReviewBox extends React.Component {
                     textAlign: "center"
                 }}
             >
-                <Grid container direction="column" alignItems="center" spacing={5}>
+                <Grid container direction="column" alignItems="center" spacing={3}>
                     <Grid item>
                         <Typography
                             variant="h2"
                             component="div"
                             fontSize="10vw"
                         >
-                            {card.word}
+                            {this.props.word}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -35,7 +34,7 @@ class ReviewBox extends React.Component {
                             component="div"
                             fontSize="4vw"
                         >
-                            {card.translation}
+                            {this.props.translation}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -44,12 +43,11 @@ class ReviewBox extends React.Component {
                             component="div"
                             fontSize="2vw"
                         >
-                            {card.definition}
+                            {this.props.definition}
                         </Typography>
                     </Grid>
                 </Grid>
             </Box>
-            )
         );
     }
 }

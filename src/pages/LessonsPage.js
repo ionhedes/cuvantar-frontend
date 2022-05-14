@@ -33,7 +33,7 @@ class LessonsPage extends React.Component {
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
-                        <LessonBox cards={getLessonsGenerator()}/>
+                        <LessonBox word={this.state.currentLesson.value.word} translation={this.state.currentLesson.value.translation} definition={this.state.currentLesson.value.definition} onChange={this.handleChange}/>
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
