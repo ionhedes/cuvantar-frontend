@@ -4,23 +4,24 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link, useNavigate} from "react-router-dom";
 import LessonBox from '../components/LessonBox';
-import getLessonsGenerator from '../services/LessonService';
+import {getLessons} from '../services/LessonService';
 import Pagination from '../components/Pagination';
 
 class LessonsPage extends React.Component {
     constructor(props) {
         super(props);
         
-        this.lessonsGenerator = getLessonsGenerator();
+        this.lessons = getLessons();
 
         
-        this.state = {value: "", currentLesson: this.lessonsGenerator.next(), todoperPage: 1 };
+        this.state = {value: "", currentLesson: this.lessons[0], todoperPage: 1 };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleLessonChange = this.handleLessonChange.bind(this);
     }
 
     isLessonQueueEmpty() {
-        return this.state.currentLesson.done === true;
+        return this.lessons.length === 0;
     }
 
     handleChange(event) {
@@ -28,17 +29,26 @@ class LessonsPage extends React.Component {
         this.setState({currentLesson: nextLesson});
     }
 
+    handleLessonChange(value){
+        this.setState({currentLesson: this.lessons[value -1]});
+    }
+
+
     render() {
         let lessonLayout = (
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
-                        <LessonBox word={this.state.currentLesson.value.word} translation={this.state.currentLesson.value.translation} definition={this.state.currentLesson.value.definition} onChange={this.handleChange}/>
+                        <LessonBox 
+                            word={this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.word} 
+                            translation={this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.translation}
+                            definition={this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.definition} onChange={this.handleChange}/>
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
                     <Grid item  mt="1vh">
-                        <Pagination onChange={this.handleChange}/>
+                        <Pagination onChange={this.handleLessonChange
+                } />
                     </Grid>
                     <Grid item>
                         <Link to="/review" style={{ textDecoration: "none" }}>

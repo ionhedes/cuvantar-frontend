@@ -1,4 +1,4 @@
-function getLessons() {
+export function getLessons() {
 
     // should we save every batch of reviews in the session storage?
     // that way we won't have to query the backend for reviews twice (when starting reviews and when ending them)
@@ -12,12 +12,3 @@ function getLessons() {
         { word: "cer", translation: "sky", definition: "Spațiu cosmic nesfârșit în care se află aștrii; (mai ales) spațiu de deasupra orizontului unui observator, care are o formă aparent emisferică, boltă cerească"},
     ];
 }
-
-function* getLessonsGenerator() {
-
-    let list = getLessons();
-
-    yield* list;
-}
-
-export default getLessonsGenerator;

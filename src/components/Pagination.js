@@ -1,17 +1,18 @@
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-export default function PaginationControlled() {
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
+  export default function PaginationControlled(props) {
+    const [page, setPage] = React.useState(1);
+    const handleChange = (event, value) => {
+      setPage(value);
+      props.onChange(value);
+    };
+    
 
   return (
     <Stack spacing={2}>
-      <Pagination count={5} page={page} onChange={handleChange} />
+      <Pagination count={5} defaultPage={1} siblingCount={1} onChange={handleChange} onClick={props.onClick}/>
     </Stack>
   );
 }
