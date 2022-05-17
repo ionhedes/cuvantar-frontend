@@ -21,6 +21,28 @@ export function fetchLessonsFromServer() {
     );
 }
 
+export function fetchMostRecentLessonsFromServer() {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(process.env.REACT_APP_API_CREDS),
+            'custom-token': sessionStorage.getItem("token")
+        },
+        mode: 'cors'
+    };
+
+    return fetch(`http://localhost:3000/api/reviews?username=${
+            encodeURIComponent(sessionStorage.getItem("username"))
+        }&recent=true`, requestOptions).then(
+        res => res.json()
+    ).then(
+        data => {
+            return data;
+        }
+    );
+}
+
 export function finishLessonSession() {
     const completedLessons = JSON.parse(sessionStorage.getItem("lessons"));
 

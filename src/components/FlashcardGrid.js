@@ -20,7 +20,7 @@ class FlashcardGrid extends React.Component {
                 <Grid container spacing={4} justifyContent='center' alignContent='center' minHeight="100">
                     {this.props.cards.map((card) =>
                         <Grid item>
-                            <Flashcard word={card.word} translation={card.translation} />
+                            <Flashcard word={card.front} translation={card.back} />
                         </Grid>
                     )}
                 </Grid>

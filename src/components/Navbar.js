@@ -6,12 +6,15 @@ import Typography from '@mui/material/Typography';
 import Button from "@mui/material/Button";
 import {logoutUser} from "../services/AuthService";
 import {useNavigate} from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import {IconButton} from "@mui/material";
 
 class Navbar extends React.Component {
     constructor(props) {
         super(props);
 
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleHome = this.handleHome.bind(this);
     }
 
     handleLogout(event) {
@@ -32,11 +35,25 @@ class Navbar extends React.Component {
         });
     }
 
+    handleHome(event) {
+        this.props.router.navigate("/home");
+    }
+
     render() {
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                            onClick={this.handleHome}
+                        >
+                            <HomeIcon/>
+                        </IconButton>
                         <Typography
                             variant="h6"
                             noWrap

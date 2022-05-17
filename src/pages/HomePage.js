@@ -6,28 +6,28 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
 import {getRecentLessonCards} from "../styles/LessonService";
+import {isLoggedIn} from "../services/AuthService";
+import {convertReviewsToCards, fetchReviewsFromServer} from "../services/ReviewService";
+import {createGenerator} from "../services/CommonService";
+import {fetchMostRecentLessonsFromServer} from "../services/LessonService";
 
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.card1 = new Map();
-        this.card1.set('word', 'cuvant');
-        this.card1.set('translation', 'word');
+        this.state = { cards: [] };
+    }
 
-        this.card2 = new Map();
-        this.card2.set('word', 'apa');
-        this.card2.set('translation', 'water');
-
-        this.card3 = new Map();
-        this.card3.set('word', 'soare');
-        this.card3.set('translation', 'sun');
-
-        this.card4 = new Map();
-        this.card4.set('word', 'picior');
-        this.card4.set('translation', 'leg');
-
-        this.cards = [ this.card1, this.card2, this.card3, this.card4 ];
+    componentDidMount() {
+        if (isLoggedIn()) {
+            fetchMostRecentLessonsFromServer().then(
+                reviews => convertReviewsToCards(reviews).then(
+                    cards => {
+                        this.setState({cards: cards});
+                    }
+                )
+            )
+        }
     }
 
     render() {
@@ -37,10 +37,10 @@ class HomePage extends React.Component {
                 <Grid container direction="column" spacing={5} alignItems="center">
                     <Grid item container spacing={3} justifyContent="center" mt={5}>
                         <Grid item>
-                            <HomepageCard name="Lessons" />
+                            <HomepageCard name="Lessons" destination="/lessons" />
                         </Grid>
                         <Grid item>
-                            <HomepageCard name="Reviews"/>
+                            <HomepageCard name="Reviews" destination="/review"/>
                         </Grid>
                     </Grid>
                     <Grid item container justifyContent="center">
@@ -49,7 +49,7 @@ class HomePage extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <FlashcardGrid cards={getRecentLessonCards()} />
+                        <FlashcardGrid cards={this.state.cards} />
                     </Grid>
                     <Grid item container spacing={2} justifyContent="center">
                         <Grid item>

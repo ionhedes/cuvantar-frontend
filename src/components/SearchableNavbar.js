@@ -7,6 +7,10 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
+import {logoutUser} from "../services/AuthService";
+import {useNavigate} from "react-router-dom";
+import {IconButton} from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -49,6 +53,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
+function MenuIcon() {
+    return null;
+}
+
 class SearchableNavbar extends React.Component {
     constructor(props) {
         super(props);
@@ -70,7 +78,21 @@ class SearchableNavbar extends React.Component {
     }
 
     handleLogout(event) {
-        alert("You logged out.");
+        logoutUser().then(res => {
+            if (res.ok) {
+                sessionStorage.removeItem("username");
+                sessionStorage.removeItem("token");
+
+                if (sessionStorage.getItem("lessons")) {
+                    sessionStorage.removeItem("lessons");
+                }
+                if (sessionStorage.getItem("reviews")) {
+                    sessionStorage.removeItem("reviews");
+                }
+
+                this.props.router.navigate('/')
+            }
+        });
     }
 
     render() {
@@ -115,4 +137,19 @@ class SearchableNavbar extends React.Component {
     }
 }
 
-export default SearchableNavbar;
+function attachRouter(Component) {
+    function ComponentWithRouter(props) {
+        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
+
+        return (
+            <Component
+                {...props}  // previous props
+                router = {{ navigate }} // router - attached prop;
+            />
+        );
+    }
+
+    return ComponentWithRouter;
+}
+
+export default attachRouter(SearchableNavbar);
