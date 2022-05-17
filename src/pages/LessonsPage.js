@@ -4,7 +4,7 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import LessonBox from '../components/LessonBox';
-import {finishLessonSession, getLessons} from '../services/LessonService';
+import {fetchLessonsFromServer, finishLessonSession} from '../services/LessonService';
 import Pagination from '../components/Pagination';
 import {isLoggedIn} from "../services/AuthService";
 
@@ -21,12 +21,16 @@ class LessonsPage extends React.Component {
     }
 
     componentDidMount() {
-        getLessons().then(lessons => {
-            this.lessons = lessons;
-            if (!this.isLessonQueueEmpty()) {
-                this.setState({currentLesson: this.lessons[0]});
-            }
-        });
+        if (isLoggedIn()) {
+            fetchLessonsFromServer().then(
+                lessons => {
+                    this.lessons = lessons;
+                    if (!this.isLessonQueueEmpty()) {
+                        this.setState({ currentLesson: this.lessons[0] });
+                    }
+                }
+            )
+        }
     }
 
     isLessonQueueEmpty() {
@@ -83,7 +87,7 @@ class LessonsPage extends React.Component {
                         variant="h2"
                         fontSize="6vw"
                     >
-                        There are no lessons left for you
+                        No lessons left!
                     </Typography>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt='1vh'>

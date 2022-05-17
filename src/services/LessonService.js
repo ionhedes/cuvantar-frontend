@@ -1,6 +1,4 @@
-import {isLoggedIn} from "./AuthService";
-
-function fetchLessonsFromServer() {
+export function fetchLessonsFromServer() {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -11,21 +9,14 @@ function fetchLessonsFromServer() {
         mode: 'cors'
     };
 
-    fetch(`http://localhost:3000/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+    return fetch(`http://localhost:3000/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
-        data => sessionStorage.setItem('lessons', JSON.stringify(data))
+        data => {
+            sessionStorage.setItem('lessons', JSON.stringify(data));
+            return data;
+        }
     );
-}
-
-export async function getLessons() {
-
-    if (!isLoggedIn()) {
-        return [];
-    }
-
-    await fetchLessonsFromServer();
-    return JSON.parse(sessionStorage.getItem("lessons"));
 }
 
 export function finishLessonSession() {
