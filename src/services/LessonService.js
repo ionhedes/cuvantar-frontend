@@ -1,4 +1,5 @@
 import {getFlashcard} from "./FlashcardService";
+import {isLoggedIn} from "./AuthService";
 
 function fetchLessonsFromServer() {
     const requestOptions = {
@@ -10,22 +11,19 @@ function fetchLessonsFromServer() {
         },
         mode: 'cors'
     };
-    fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+    fetch(`http://localhost:3000/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
         data => sessionStorage.setItem('lessons', JSON.stringify(data))
     );
 }
 
-export async function getLessons() {
+export function getLessons() {
 
-    fetchLessonsFromServer();
-
-    let cards = [];
-
-    for (const lessons of JSON.parse(sessionStorage.getItem("lessons"))) {
-        cards = cards.concat(await getFlashcard(lessons.id));
+    if (!isLoggedIn()) {
+        return [];
     }
 
-    return cards;
+    fetchLessonsFromServer();
+    return JSON.parse(sessionStorage.getItem("lessons"));
 }

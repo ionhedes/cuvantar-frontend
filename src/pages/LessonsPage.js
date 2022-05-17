@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import LessonBox from '../components/LessonBox';
 import {getLessons} from '../services/LessonService';
 import Pagination from '../components/Pagination';
@@ -11,12 +11,10 @@ class LessonsPage extends React.Component {
     constructor(props) {
         super(props);
         
-        this.lessons = {};
-
+        this.lessons = getLessons();
         
-        this.state = {value: "", currentLesson: {this.lessons[0]}, todoperPage: 1 };
+        this.state = {value: "", currentLesson: this.lessons[0], todoperPage: 1 };
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleLessonChange = this.handleLessonChange.bind(this);
     }
 
@@ -24,25 +22,26 @@ class LessonsPage extends React.Component {
         return this.lessons.length === 0;
     }
 
-    handleChange(event) {
-        let nextLesson = this.lessonsGenerator.next();
-        this.setState({currentLesson: nextLesson});
-    }
-
     handleLessonChange(value){
-        this.setState({currentLesson: this.lessons[value -1]});
+        this.setState({currentLesson: this.lessons[value - 1]});
     }
 
 
     render() {
+
+        if(sessionStorage.getItem("token") === null) {
+            return <Navigate replace='true' to='/'/>
+        }
+
         let lessonLayout = (
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
                         <LessonBox 
-                            word={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.word} 
-                            translation={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.translation}
-                            definition={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.definition} onChange={this.handleChange}/>
+                            word={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.front}
+                            translation={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.back}
+                            definition={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.definition}
+                            onChange={this.handleLessonChange}/>
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
@@ -90,6 +89,19 @@ class LessonsPage extends React.Component {
     }
 }
 
+function attachRouter(Component) {
+    function ComponentWithRouter(props) {
+        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
 
+        return (
+            <Component
+                {...props}  // previous props
+                router = {{ navigate }} // router - attached prop;
+            />
+        );
+    }
+
+    return attachRouter(ComponentWithRouter);
+}
 
 export default LessonsPage;
