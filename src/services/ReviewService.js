@@ -11,6 +11,8 @@ export function fetchReviewsFromServer() {
         mode: 'cors'
     };
 
+    sessionStorage.removeItem("reviews");
+
     return fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
@@ -54,6 +56,4 @@ export function sendReviewResults(answers) {
             encodeURIComponent(ans)
             }`, requestOptions).then(response => response.json);
     });
-
-    sessionStorage.removeItem("reviews");
 }
