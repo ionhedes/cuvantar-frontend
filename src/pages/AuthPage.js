@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, TextField, Typography} from "@mui/material";
+import {Grid, Snackbar, TextField, Typography} from "@mui/material";
 import NavbarAuthScreen from "../components/NavbarAuthScreen";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,10 +13,13 @@ class AuthPage extends React.Component {
             usernameRegister: '',
             passwordRegister: '',
             usernameLogin: '',
-            passwordLogin: ''}
+            passwordLogin: '',
+            open: false,
+            errorMessage: ''}
 
         this.onClickLogin = this.onClickLogin.bind(this);
         this.onClickRegister = this.onClickRegister.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -31,19 +34,27 @@ class AuthPage extends React.Component {
         });
     }
 
-    onClickLogin(){
+    onClickLogin() {
         let creds = {
             username: this.state.usernameLogin,
             password: this.state.passwordLogin,
         }
         loginUser(creds).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 let token = ''
                 sessionStorage.setItem('username', creds.username)
-                res.json().then(data => token=data.token).then(() => sessionStorage.setItem('token', token))
+                res.json().then(data => token = data.token).then(() => sessionStorage.setItem('token', token))
                 this.props.router.navigate('/home')
             }
-        });
+            else{
+                res.json().then(x => {
+                    this.setState({
+                        open: true,
+                        errorMessage: (x.error === 'User  does not exist' || creds.password === '') ? 'PlEaSe eNtEr CrEds' : x.error
+                    });
+                })
+            }
+        })
     }
 
     onClickRegister(){
@@ -52,8 +63,32 @@ class AuthPage extends React.Component {
             password: this.state.passwordRegister,
             email: this.state.emailRegister
         }
-        registerUser(user)
-        window.location.reload();
+        if(user.username === '' || user.password === '' || user.email === ''){
+            this.setState({
+                open: true,
+                errorMessage: 'PlEaSe eNtEr iNfO'
+            });
+            return;
+        }
+        registerUser(user).then(res => {
+            if (!res.ok) {
+                res.json().then(x => {
+                    this.setState({
+                        open: true,
+                        errorMessage: x.error
+                    });
+                })
+            }
+            else{
+                window.location.reload();
+            }
+        })
+    }
+
+    handleClose(){
+        this.setState({
+            open: false
+        });
     }
 
     render() {
@@ -62,6 +97,12 @@ class AuthPage extends React.Component {
         }
         return (
             <div className="AuthPage">
+                <Snackbar
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    autoHideDuration={2000}
+                    message={this.state.errorMessage}
+                />
                 <NavbarAuthScreen/>
                 <div style={{display: 'flex', minWidth: '100vw', minHeight: '80vh', justifyContent: 'center', alignItems: 'center'}}>
                 <Grid container direction='row' justifyContent='center'>
