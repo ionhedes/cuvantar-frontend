@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, TextField, Typography} from "@mui/material";
+import {Grid, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 
 class ReviewBox extends React.Component {
@@ -11,6 +11,7 @@ class ReviewBox extends React.Component {
                     justifyContent: 'center',
                     alignContent: 'center',
                     minWidth: {xs: '80vw', md: '60vw'},
+                    maxWidth: {xs: '80vw'},
                     backgroundColor: '#e0e0e0',
                     borderRadius: '30px',
                     width: '600px',
@@ -25,23 +26,23 @@ class ReviewBox extends React.Component {
                             component="div"
                             fontSize="10vw"
                         >
-                            {this.props.word}
+                            {this.props.front}
                         </Typography>
                     </Grid>
                     <Grid item>
-                    <Typography
+                        <Typography
                             variant="h4"
                             component="div"
-                            fontSize="4vw"
+                            fontSize= {{xs: "5vw", md: "2vw"}}
                         >
-                            {this.props.translation}
+                            {this.props.back}
                         </Typography>
                     </Grid>
                     <Grid item>
-                    <Typography
+                        <Typography
                             variant="p"
                             component="div"
-                            fontSize="2vw"
+                            fontSize= {{xs: "5vw", md: "2vw"}}
                         >
                             {this.props.definition}
                         </Typography>

@@ -40,4 +40,4 @@ class ReviewBox extends React.Component {
     }
 }
 
-export default ReviewBox
+export default ReviewBox;

@@ -4,18 +4,29 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import LessonBox from '../components/LessonBox';
-import {getLessons} from '../services/LessonService';
+import {finishLessonSession, getLessons} from '../services/LessonService';
 import Pagination from '../components/Pagination';
+import {isLoggedIn} from "../services/AuthService";
 
 class LessonsPage extends React.Component {
     constructor(props) {
         super(props);
         
-        this.lessons = getLessons();
+        this.lessons = [];
         
-        this.state = {value: "", currentLesson: this.lessons[0], todoperPage: 1 };
+        this.state = {value: "", currentLesson: {front: "", back: "", definition: ""}, todoperPage: 1 };
 
         this.handleLessonChange = this.handleLessonChange.bind(this);
+        this.finishLessons = this.finishLessons.bind(this);
+    }
+
+    componentDidMount() {
+        getLessons().then(lessons => {
+            this.lessons = lessons;
+            if (!this.isLessonQueueEmpty()) {
+                this.setState({currentLesson: this.lessons[0]});
+            }
+        });
     }
 
     isLessonQueueEmpty() {
@@ -24,12 +35,19 @@ class LessonsPage extends React.Component {
 
     handleLessonChange(value){
         this.setState({currentLesson: this.lessons[value - 1]});
+        console.log(this.state.currentLesson);
+    }
+
+    finishLessons() {
+        finishLessonSession();
+        this.props.router.navigate("/home");
+
     }
 
 
     render() {
 
-        if(sessionStorage.getItem("token") === null) {
+        if(!isLoggedIn()) {
             return <Navigate replace='true' to='/'/>
         }
 
@@ -37,17 +55,16 @@ class LessonsPage extends React.Component {
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
-                        <LessonBox 
-                            word={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.front}
-                            translation={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.back}
-                            definition={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.definition}
-                            onChange={this.handleLessonChange}/>
+                        <LessonBox
+                            front={this.state.currentLesson.front}
+                            back={this.state.currentLesson.back}
+                            definition={this.state.currentLesson.definition}
+                        />
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
                     <Grid item  mt="1vh">
-                        <Pagination onChange={this.handleLessonChange
-                } />
+                        <Pagination count={this.lessons.length} onChange={this.handleLessonChange} />
                     </Grid>
                     <Grid item>
                         <Link to="/review" style={{ textDecoration: "none" }}>
@@ -72,7 +89,10 @@ class LessonsPage extends React.Component {
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt='1vh'>
                     <Link to="/home" style={{ textDecoration: "none" }}>
-                        <Button variant="contained">
+                        <Button
+                            variant="contained"
+                            onClick={this.finishLessons}
+                        >
                             Go back home
                         </Button>
                     </Link>
@@ -101,7 +121,7 @@ function attachRouter(Component) {
         );
     }
 
-    return attachRouter(ComponentWithRouter);
+    return ComponentWithRouter;
 }
 
-export default LessonsPage;
+export default attachRouter(LessonsPage);

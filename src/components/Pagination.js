@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 
   return (
     <Stack spacing={2}>
-      <Pagination count={5} defaultPage={1} siblingCount={1} onChange={handleChange} onClick={props.onClick}/>
+      <Pagination count={props.count} defaultPage={1} siblingCount={1} onChange={handleChange} onClick={props.onClick}/>
     </Stack>
   );
 }
