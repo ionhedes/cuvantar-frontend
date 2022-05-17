@@ -1,7 +1,6 @@
 import {getFlashcard} from "./FlashcardService";
-import {isLoggedIn} from "./AuthService";
 
-function fetchReviewsFromServer() {
+export function fetchReviewsFromServer() {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -11,25 +10,22 @@ function fetchReviewsFromServer() {
         },
         mode: 'cors'
     };
-    fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+
+    return fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
-        data => sessionStorage.setItem('reviews', JSON.stringify(data))
+        data => {
+            sessionStorage.setItem("reviews", JSON.stringify(data));
+            return data;
+        }
     );
 }
 
-export async function getReviews() {
-
-    if (!isLoggedIn()) {
-        return [];
-    }
-
-    fetchReviewsFromServer();
-
+export async function convertReviewsToCards(reviews) {
     let cards = [];
 
-    for (const review of JSON.parse(sessionStorage.getItem("reviews"))) {
-        cards = cards.concat(await getFlashcard(review.id));
+    for (const review of reviews) {
+        cards = cards.concat(await getFlashcard(review.card_id));
     }
 
     return cards;
@@ -53,7 +49,7 @@ export function sendReviewResults(answers) {
         fetch(`http://localhost:3000/api/reviews?username=${
                 encodeURIComponent(sessionStorage.getItem("username"))
             }&cardId=${
-                encodeURIComponent(reviews[idx].id)
+                encodeURIComponent(reviews[idx].card_id)
             }&passed=${
             encodeURIComponent(ans)
             }`, requestOptions).then(response => response.json);

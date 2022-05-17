@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import ReviewBox from "../components/ReviewBox";
-import {getReviews, sendReviewResults} from "../services/ReviewService";
+import {convertReviewsToCards, fetchReviewsFromServer, sendReviewResults} from "../services/ReviewService";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import {createGenerator} from "../services/CommonService";
 import {isLoggedIn} from "../services/AuthService";
@@ -22,10 +22,16 @@ class ReviewPage extends React.Component {
     }
 
     componentDidMount() {
-        getReviews().then(reviews => {
-            this.reviewGenerator = createGenerator(reviews);
-            this.setState({currentReview: this.reviewGenerator.next()});
-        });
+        if (isLoggedIn()) {
+            fetchReviewsFromServer().then(
+                reviews => convertReviewsToCards(reviews).then(
+                    cards => {
+                        this.reviewGenerator = createGenerator(cards);
+                        this.setState({currentReview: this.reviewGenerator.next()});
+                    }
+                )
+            )
+        }
     }
 
     isReviewQueueEmpty() {
