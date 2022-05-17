@@ -41,12 +41,12 @@ export function finishLessonSession() {
         mode: 'cors'
     };
 
-    completedLessons.forEach((lesson) => {
+    completedLessons.forEach((card) => {
         fetch(`http://localhost:3000/api/reviews?username=${
             encodeURIComponent(sessionStorage.getItem("username"))
         }&cardId=${
-            encodeURIComponent(lesson.id)
-        }`, requestOptions).then(response => response.json())
+            encodeURIComponent(card.id)
+        }`, requestOptions)
     });
 
     sessionStorage.removeItem("lessons");

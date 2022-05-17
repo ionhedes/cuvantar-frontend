@@ -12,9 +12,9 @@ class LessonsPage extends React.Component {
     constructor(props) {
         super(props);
         
-        this.lessons = [];
+        this.lessons = { length: 0 };
         
-        this.state = {value: "", currentLesson: {front: "", back: "", definition: ""}, todoperPage: 1 };
+        this.state = { value: "", currentLesson: { front: "", back: "", definition: "" } };
 
         this.handleLessonChange = this.handleLessonChange.bind(this);
         this.finishLessons = this.finishLessons.bind(this);
@@ -30,7 +30,7 @@ class LessonsPage extends React.Component {
     }
 
     isLessonQueueEmpty() {
-        return this.lessons.length === 0;
+        return this.lessons === [] || this.lessons === null || this.lessons.length === 0;
     }
 
     handleLessonChange(value){
@@ -41,9 +41,7 @@ class LessonsPage extends React.Component {
     finishLessons() {
         finishLessonSession();
         this.props.router.navigate("/home");
-
     }
-
 
     render() {
 
@@ -67,11 +65,12 @@ class LessonsPage extends React.Component {
                         <Pagination count={this.lessons.length} onChange={this.handleLessonChange} />
                     </Grid>
                     <Grid item>
-                        <Link to="/review" style={{ textDecoration: "none" }}>
-                            <Button variant="contained">
-                                Finish
-                            </Button>
-                        </Link>
+                        <Button
+                            variant="contained"
+                            onClick={this.finishLessons}
+                        >
+                            Finish
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>
@@ -91,7 +90,7 @@ class LessonsPage extends React.Component {
                     <Link to="/home" style={{ textDecoration: "none" }}>
                         <Button
                             variant="contained"
-                            onClick={this.finishLessons}
+
                         >
                             Go back home
                         </Button>
@@ -101,7 +100,7 @@ class LessonsPage extends React.Component {
         )
 
         return (
-            <div className="ReviewPage">
+            <div className="LessonsPage">
                 <Navbar />
                 {this.isLessonQueueEmpty() ? noLessonLayout : lessonLayout}
             </div>
