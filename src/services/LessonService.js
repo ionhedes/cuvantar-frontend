@@ -1,14 +1,31 @@
-export function getLessons() {
+import {getFlashcard} from "./FlashcardService";
 
-    // should we save every batch of reviews in the session storage?
-    // that way we won't have to query the backend for reviews twice (when starting reviews and when ending them)
-    // also we will be able to correlate the answer booleans and the cards
+function fetchLessonsFromServer() {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(process.env.REACT_APP_API_CREDS),
+            'custom-token': sessionStorage.getItem("token")
+        },
+        mode: 'cors'
+    };
+    fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+        res => res.json()
+    ).then(
+        data => sessionStorage.setItem('lessons', JSON.stringify(data))
+    );
+}
 
-    return [
-        { word: "sare", translation: "salt", definition: "Substanță cristalină, sfărâmicioasă, solubilă în apă și cu gust specific, care constituie un condiment de bază în alimentație și este folosită în industria conservelor, în tăbăcărie, în industria chimică clorură de sodiu" },
-        { word: "lac", translation: "lake", definition: "Întindere mai mare de apă stătătoare, închisă între maluri, uneori cu scurgere la mare sau la un râu" },
-        { word: "avion", translation: "plane", definition: "Aeronavă mai grea decât aerul, susținută de aripi și propulsată de motoare" },
-        { word: "borcan", translation: "jar", definition: "Vas (cilindric) de sticlă (sau de lut, de faianță etc.), fără toartă, larg la gură și cu marginile ușor răsfrânte, folosit pentru păstrarea conservelor, a preparatelor farmaceutice"},
-        { word: "cer", translation: "sky", definition: "Spațiu cosmic nesfârșit în care se află aștrii; (mai ales) spațiu de deasupra orizontului unui observator, care are o formă aparent emisferică, boltă cerească"},
-    ];
+export async function getLessons() {
+
+    fetchLessonsFromServer();
+
+    let cards = [];
+
+    for (const lessons of JSON.parse(sessionStorage.getItem("lessons"))) {
+        cards = cards.concat(await getFlashcard(lessons.id));
+    }
+
+    return cards;
 }

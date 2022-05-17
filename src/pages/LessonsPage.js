@@ -11,10 +11,10 @@ class LessonsPage extends React.Component {
     constructor(props) {
         super(props);
         
-        this.lessons = getLessons();
+        this.lessons = {};
 
         
-        this.state = {value: "", currentLesson: this.lessons[0], todoperPage: 1 };
+        this.state = {value: "", currentLesson: {this.lessons[0]}, todoperPage: 1 };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleLessonChange = this.handleLessonChange.bind(this);
@@ -40,9 +40,9 @@ class LessonsPage extends React.Component {
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
                         <LessonBox 
-                            word={this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.word} 
-                            translation={this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.translation}
-                            definition={this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.definition} onChange={this.handleChange}/>
+                            word={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.word} 
+                            translation={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.translation}
+                            definition={!this.isLessonQueueEmpty() ?  "" : this.state.currentLesson.definition} onChange={this.handleChange}/>
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
@@ -66,9 +66,9 @@ class LessonsPage extends React.Component {
                 <Grid item justifyContent="center">
                     <Typography
                         variant="h2"
-                        fontSize="8vw"
+                        fontSize="6vw"
                     >
-                        No Lessons!
+                        There are no lessons left for you
                     </Typography>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt='1vh'>
