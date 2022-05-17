@@ -29,3 +29,7 @@ export function logoutUser() {
     };
     return fetch(`http://localhost:3000/api/logout?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions);
 }
+
+export function isLoggedIn() {
+    return sessionStorage.getItem('token') && sessionStorage.getItem('username')
+}

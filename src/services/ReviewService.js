@@ -1,4 +1,5 @@
 import {getFlashcard} from "./FlashcardService";
+import {isLoggedIn} from "./AuthService";
 
 function fetchReviewsFromServer() {
     const requestOptions = {
@@ -19,9 +20,9 @@ function fetchReviewsFromServer() {
 
 export async function getReviews() {
 
-    // should we save every batch of reviews in the session storage?
-    // that way we won't have to query the backend for reviews twice (when starting reviews and when ending them)
-    // also we will be able to correlate the answer booleans and the cards
+    if (!isLoggedIn()) {
+        return [];
+    }
 
     fetchReviewsFromServer();
 

@@ -6,6 +6,7 @@ import ReviewBox from "../components/ReviewBox";
 import {getReviews, sendReviewResults} from "../services/ReviewService";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import {createGenerator} from "../services/CommonService";
+import {isLoggedIn} from "../services/AuthService";
 
 class ReviewPage extends React.Component {
     constructor(props) {
@@ -53,7 +54,7 @@ class ReviewPage extends React.Component {
 
     render() {
 
-        if(sessionStorage.getItem("token") === null) {
+        if (!isLoggedIn()) {
             return <Navigate replace='true' to='/'/>
         }
 
