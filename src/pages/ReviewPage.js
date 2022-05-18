@@ -4,8 +4,8 @@ import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import ReviewBox from "../components/ReviewBox";
 import {convertReviewsToCards, fetchReviewsFromServer, sendReviewResults} from "../services/ReviewService";
-import {Link, Navigate, useNavigate} from "react-router-dom";
-import {createGenerator} from "../services/CommonService";
+import {Link, Navigate} from "react-router-dom";
+import {attachRouter, createGenerator} from "../services/CommonService";
 import {isLoggedIn} from "../services/AuthService";
 
 class ReviewPage extends React.Component {
@@ -54,8 +54,8 @@ class ReviewPage extends React.Component {
     }
 
     finishReviews(event) {
-        sendReviewResults(this.answers);
-        this.props.router.navigate("/summary");
+        const completedReviews = sendReviewResults(this.answers);
+        this.props.router.navigate("/summary", { state: { completedReviews } });
     }
 
     render() {
@@ -119,21 +119,6 @@ class ReviewPage extends React.Component {
             </div>
         );
     }
-}
-
-function attachRouter(Component) {
-    function ComponentWithRouter(props) {
-        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
-
-        return (
-            <Component
-                {...props}  // previous props
-                router = {{ navigate }} // router - attached prop;
-            />
-        );
-    }
-
-    return ComponentWithRouter;
 }
 
 export default attachRouter(ReviewPage);

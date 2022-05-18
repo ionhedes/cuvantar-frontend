@@ -2,11 +2,12 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
-import {Link, Navigate, useNavigate} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import LessonBox from '../components/LessonBox';
 import {fetchLessonsFromServer, finishLessonSession} from '../services/LessonService';
 import Pagination from '../components/Pagination';
 import {isLoggedIn} from "../services/AuthService";
+import {attachRouter} from "../services/CommonService";
 
 class LessonsPage extends React.Component {
     constructor(props) {
@@ -110,21 +111,6 @@ class LessonsPage extends React.Component {
             </div>
         );
     }
-}
-
-function attachRouter(Component) {
-    function ComponentWithRouter(props) {
-        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
-
-        return (
-            <Component
-                {...props}  // previous props
-                router = {{ navigate }} // router - attached prop;
-            />
-        );
-    }
-
-    return ComponentWithRouter;
 }
 
 export default attachRouter(LessonsPage);

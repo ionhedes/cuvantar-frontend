@@ -3,8 +3,9 @@ import {Grid, Snackbar, TextField, Typography} from "@mui/material";
 import NavbarAuthScreen from "../components/NavbarAuthScreen";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {loginUser, registerUser} from "../services/AuthService";
-import {Navigate, useNavigate} from "react-router-dom";
+import {isLoggedIn, loginUser, registerUser} from "../services/AuthService";
+import {Navigate} from "react-router-dom";
+import {attachRouter} from "../services/CommonService";
 
 class AuthPage extends React.Component {
     constructor(props) {
@@ -92,9 +93,11 @@ class AuthPage extends React.Component {
     }
 
     render() {
-        if(sessionStorage.getItem("token") !== null) {
-            return <Navigate replace='true' to='/home/'/>
+
+        if (isLoggedIn()) {
+            return <Navigate replace='true' to='/home'/>
         }
+
         return (
             <div className="AuthPage">
                 <Snackbar
@@ -189,21 +192,6 @@ class AuthPage extends React.Component {
             </div>
         );
     }
-}
-
-function attachRouter(Component) {
-    function ComponentWithRouter(props) {
-        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
-
-        return (
-            <Component
-                {...props}  // previous props
-                router = {{ navigate }} // router - attached prop;
-            />
-        );
-    }
-
-    return ComponentWithRouter;
 }
 
 export default attachRouter(AuthPage);

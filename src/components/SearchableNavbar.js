@@ -8,9 +8,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
 import {logoutUser} from "../services/AuthService";
-import {useNavigate} from "react-router-dom";
-import {IconButton} from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
+import {attachRouter} from "../services/CommonService";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -51,11 +49,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-
-
-function MenuIcon() {
-    return null;
-}
 
 class SearchableNavbar extends React.Component {
     constructor(props) {
@@ -135,21 +128,6 @@ class SearchableNavbar extends React.Component {
             </Box>
         );
     }
-}
-
-function attachRouter(Component) {
-    function ComponentWithRouter(props) {
-        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
-
-        return (
-            <Component
-                {...props}  // previous props
-                router = {{ navigate }} // router - attached prop;
-            />
-        );
-    }
-
-    return ComponentWithRouter;
 }
 
 export default attachRouter(SearchableNavbar);
