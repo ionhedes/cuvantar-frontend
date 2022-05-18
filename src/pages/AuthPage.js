@@ -44,8 +44,10 @@ class AuthPage extends React.Component {
             if (res.ok) {
                 let token = ''
                 sessionStorage.setItem('username', creds.username)
-                res.json().then(data => token = data.token).then(() => sessionStorage.setItem('token', token))
-                this.props.router.navigate('/home')
+                res.json().then(data => token = data.token).then(() => {
+                    sessionStorage.setItem('token', token);
+                    this.props.router.navigate('/home');
+                })
             }
             else{
                 res.json().then(x => {
