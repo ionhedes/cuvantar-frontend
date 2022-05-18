@@ -24,11 +24,13 @@ export function fetchReviewsFromServer() {
     );
 }
 
-export async function convertReviewsToCards(reviews) {
+export async function convertReviewsToCards(reviews, limit=100) {
     let cards = [];
-
+    let i = 0;
     for (const review of reviews) {
+        i += 1;
         cards = cards.concat(await getFlashcard(review.card_id));
+        if(i >= limit) break;
     }
 
     return cards;

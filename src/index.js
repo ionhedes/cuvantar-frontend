@@ -8,6 +8,7 @@ import ReviewPage from "./pages/ReviewPage";
 import SummaryPage from "./pages/SummaryPage";
 import FlashcardPage from "./pages/FlashcardPage";
 import AllFlashcardsPage from "./pages/AllFlashcardsPage";
+import StudiedFlashcardsPage from "./pages/StudiedFlashcardsPage";
 import AuthPage from "./pages/AuthPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,6 +22,7 @@ root.render(
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/summary" element={<SummaryPage />} />
               <Route path="/cards" element={<AllFlashcardsPage />} />
+              <Route path="/cards/studied" element={<StudiedFlashcardsPage />} />
               <Route path="/card" element={<FlashcardPage />}>
                   <Route path=":cardId" element={<FlashcardPage />} />
               </Route>
