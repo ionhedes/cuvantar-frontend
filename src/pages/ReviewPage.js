@@ -7,16 +7,17 @@ import {convertReviewsToCards, fetchReviewsFromServer, sendReviewResults} from "
 import {Link, Navigate} from "react-router-dom";
 import {attachRouter, createGenerator} from "../services/CommonService";
 import {isLoggedIn} from "../services/AuthService";
+import Loading from "../components/Loading";
 
 class ReviewPage extends React.Component {
     constructor(props) {
         super(props);
 
         this.reviewGenerator = {};
-        this.state = {value: "", currentReview: {value: {front: "", back: ""}, done: true}, answers: []};
+        this.state = { loaded: false, value: "", currentReview: {value: {front: "", back: ""}, done: true}, answers: [] };
         this.answers = [];
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleTypeAnswer = this.handleTypeAnswer.bind(this);
         this.sendAnswer = this.sendAnswer.bind(this);
         this.finishReviews = this.finishReviews.bind(this);
     }
@@ -27,7 +28,7 @@ class ReviewPage extends React.Component {
                 reviews => convertReviewsToCards(reviews).then(
                     cards => {
                         this.reviewGenerator = createGenerator(cards);
-                        this.setState({currentReview: this.reviewGenerator.next()});
+                        this.setState({loaded: true, currentReview: this.reviewGenerator.next()});
                     }
                 )
             )
@@ -38,7 +39,11 @@ class ReviewPage extends React.Component {
         return this.state.currentReview.done === true;
     }
 
-    handleChange(event) {
+    areReviewsLoaded() {
+        return this.state.loaded;
+    }
+
+    handleTypeAnswer(event) {
         this.setState({value: event.target.value});
     }
 
@@ -68,7 +73,7 @@ class ReviewPage extends React.Component {
             <Grid container direction="column">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
-                        <ReviewBox word={!this.isReviewQueueEmpty() ? this.state.currentReview.value.front : ""} onChange={this.handleChange}/>
+                        <ReviewBox word={!this.isReviewQueueEmpty() ? this.state.currentReview.value.front : ""} onChange={this.handleTypeAnswer}/>
                     </Grid>
                 </Grid>
                 <Grid item container spacing={2} justifyContent="center" mt="1vh">
@@ -115,7 +120,11 @@ class ReviewPage extends React.Component {
         return (
             <div className="ReviewPage">
                 <Navbar />
-                {this.isReviewQueueEmpty() ? noReviewLayout : reviewLayout}
+                {
+                    this.areReviewsLoaded() ?
+                        this.isReviewQueueEmpty() ? noReviewLayout : reviewLayout
+                        : (<Loading />)
+                }
             </div>
         );
     }

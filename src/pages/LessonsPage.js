@@ -8,6 +8,7 @@ import {fetchLessonsFromServer, finishLessonSession} from '../services/LessonSer
 import Pagination from '../components/Pagination';
 import {isLoggedIn} from "../services/AuthService";
 import {attachRouter} from "../services/CommonService";
+import Loading from "../components/Loading";
 
 class LessonsPage extends React.Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class LessonsPage extends React.Component {
         
         this.lessons = { length: 0 };
         
-        this.state = { value: "", currentLesson: { front: "", back: "", definition: "" } };
+        this.state = { loaded: false, value: "", currentLesson: { front: "", back: "", definition: "" } };
 
         this.handleLessonChange = this.handleLessonChange.bind(this);
         this.finishLessons = this.finishLessons.bind(this);
@@ -26,6 +27,7 @@ class LessonsPage extends React.Component {
             fetchLessonsFromServer().then(
                 lessons => {
                     this.lessons = lessons;
+                    this.setState({ loaded: true});
                     if (!this.isLessonQueueEmpty()) {
                         this.setState({ currentLesson: this.lessons[0] });
                     }
@@ -38,9 +40,12 @@ class LessonsPage extends React.Component {
         return this.lessons === [] || this.lessons === null || this.lessons.length === 0;
     }
 
+    areLessonsLoaded() {
+        return this.state.loaded;
+    }
+
     handleLessonChange(value){
         this.setState({currentLesson: this.lessons[value - 1]});
-        console.log(this.state.currentLesson);
     }
 
     finishLessons() {
@@ -107,7 +112,11 @@ class LessonsPage extends React.Component {
         return (
             <div className="LessonsPage">
                 <Navbar />
-                {this.isLessonQueueEmpty() ? noLessonLayout : lessonLayout}
+                {
+                    this.areLessonsLoaded() ?
+                        this.isLessonQueueEmpty() ? noLessonLayout : lessonLayout
+                        : (<Loading />)
+                }
             </div>
         );
     }

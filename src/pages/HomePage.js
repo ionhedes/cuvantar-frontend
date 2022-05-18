@@ -2,7 +2,7 @@ import FlashcardGrid from '../components/FlashcardGrid';
 import React from 'react';
 import SearchableNavbar from "../components/SearchableNavbar";
 import HomepageCard from "../components/HomepageCard";
-import {Grid, Typography} from "@mui/material";
+import {CircularProgress, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Link, Navigate} from "react-router-dom";
 import {isLoggedIn} from "../services/AuthService";
@@ -13,7 +13,7 @@ class HomePage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { cards: [] };
+        this.state = { loaded: false, cards: [] };
     }
 
     componentDidMount() {
@@ -21,11 +21,15 @@ class HomePage extends React.Component {
             fetchMostRecentLessonsFromServer().then(
                 reviews => convertReviewsToCards(reviews).then(
                     cards => {
-                        this.setState({cards: cards});
+                        this.setState({ loaded:true, cards: cards });
                     }
                 )
             )
         }
+    }
+
+    areRecentCardsLoaded() {
+        return this.state.loaded;
     }
 
     render() {
@@ -52,7 +56,7 @@ class HomePage extends React.Component {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <FlashcardGrid cards={this.state.cards} />
+                        { this.areRecentCardsLoaded() ? (<FlashcardGrid cards={this.state.cards} />) : (<CircularProgress />) }
                     </Grid>
                     <Grid item container spacing={2} justifyContent="center">
                         <Grid item>

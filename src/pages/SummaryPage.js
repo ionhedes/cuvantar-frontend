@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Typography} from "@mui/material";
+import {CircularProgress, Grid, Typography} from "@mui/material";
 import FlashcardGrid from "../components/FlashcardGrid";
 import Navbar from "../components/Navbar";
 import {filterFinishedReviews} from "../services/ReviewService";
@@ -11,19 +11,27 @@ class SummaryPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {correct: [], incorrect: []};
+        this.state = { loadedCorrectCards: false, loadedIncorrectCards: false, correctCards: [], incorrectCards: [] };
     }
 
     componentDidMount() {
 
         if (!this.wasCalledWithoutReviews()) {
             filterFinishedReviews(this.props.router.location.state.completedReviews, true).then(cards => {
-                this.setState({ correct: cards });
+                this.setState({ loadedCorrectCards: true, correct: cards });
             })
             filterFinishedReviews(this.props.router.location.state.completedReviews, false).then(cards => {
-                this.setState({ incorrect: cards });
+                this.setState({ loadedIncorrectCards: true, incorrect: cards });
             })
         }
+    }
+
+    areCorrectCardsLoaded() {
+        return this.state.loadedCorrectCards;
+    }
+
+    areIncorrectCardsLoaded() {
+        return this.state.loadedIncorrectCards;
     }
 
     wasCalledWithoutReviews() {
@@ -44,13 +52,13 @@ class SummaryPage extends React.Component {
                         <Typography variant="h3">Answered correctly</Typography>
                     </Grid>
                     <Grid item>
-                        <FlashcardGrid cards={this.state.correct}></FlashcardGrid>
+                        { this.areCorrectCardsLoaded() ? (<FlashcardGrid cards={this.state.correct} />) : (<CircularProgress />) }
                     </Grid>
                     <Grid item>
                         <Typography variant="h3">Answered incorrectly</Typography>
                     </Grid>
                     <Grid item>
-                        <FlashcardGrid cards={this.state.incorrect}></FlashcardGrid>
+                        { this.areIncorrectCardsLoaded() ? (<FlashcardGrid cards={this.state.incorrect} />) : (<CircularProgress />) }
                     </Grid>
                 </Grid>
             </div>
