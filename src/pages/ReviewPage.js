@@ -54,8 +54,8 @@ class ReviewPage extends React.Component {
     }
 
     finishReviews(event) {
-        sendReviewResults(this.answers);
-        this.props.router.navigate("/summary");
+        const completedReviews = sendReviewResults(this.answers);
+        this.props.router.navigate("/summary", { state: { completedReviews } });
     }
 
     render() {

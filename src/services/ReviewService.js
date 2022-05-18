@@ -12,6 +12,7 @@ export function fetchReviewsFromServer() {
     };
 
     sessionStorage.removeItem("reviews");
+    sessionStorage.removeItem("completedReviews");
 
     return fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
@@ -48,12 +49,20 @@ export function sendReviewResults(answers) {
     };
 
     answers.forEach((ans, idx) => {
+        reviews[idx].result = ans;
         fetch(`http://localhost:3000/api/reviews?username=${
                 encodeURIComponent(sessionStorage.getItem("username"))
             }&cardId=${
                 encodeURIComponent(reviews[idx].card_id)
             }&passed=${
             encodeURIComponent(ans)
-            }`, requestOptions).then(response => response.json);
+            }`, requestOptions)
     });
+
+    return reviews.slice(0, answers.length);
+}
+
+export async function filterFinishedReviews(reviews, status) {
+
+    return convertReviewsToCards(reviews.filter(r => r.result === status));
 }
