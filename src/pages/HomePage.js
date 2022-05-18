@@ -4,11 +4,9 @@ import SearchableNavbar from "../components/SearchableNavbar";
 import HomepageCard from "../components/HomepageCard";
 import {Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
-import {Link} from "react-router-dom";
-import {getRecentLessonCards} from "../styles/LessonService";
+import {Link, Navigate} from "react-router-dom";
 import {isLoggedIn} from "../services/AuthService";
-import {convertReviewsToCards, fetchReviewsFromServer} from "../services/ReviewService";
-import {createGenerator} from "../services/CommonService";
+import {convertReviewsToCards} from "../services/ReviewService";
 import {fetchMostRecentLessonsFromServer} from "../services/LessonService";
 
 class HomePage extends React.Component {
@@ -31,6 +29,11 @@ class HomePage extends React.Component {
     }
 
     render() {
+
+        if (!isLoggedIn()) {
+            return <Navigate replace='true' to='/'/>
+        }
+
         return (
             <div className="Home">
                 <SearchableNavbar></SearchableNavbar>

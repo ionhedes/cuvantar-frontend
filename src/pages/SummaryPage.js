@@ -3,8 +3,9 @@ import {Grid, Typography} from "@mui/material";
 import FlashcardGrid from "../components/FlashcardGrid";
 import Navbar from "../components/Navbar";
 import {filterFinishedReviews} from "../services/ReviewService";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {isLoggedIn} from "../services/AuthService";
+import {attachRouter} from "../services/CommonService";
 
 class SummaryPage extends React.Component {
     constructor(props) {
@@ -55,22 +56,6 @@ class SummaryPage extends React.Component {
             </div>
         );
     }
-}
-
-function attachRouter(Component) {
-    function ComponentWithRouter(props) {
-        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
-        let location = useLocation();
-
-        return (
-            <Component
-                {...props}  // previous props
-                router = {{ navigate, location }} // router - attached prop;
-            />
-        );
-    }
-
-    return ComponentWithRouter;
 }
 
 export default attachRouter(SummaryPage);

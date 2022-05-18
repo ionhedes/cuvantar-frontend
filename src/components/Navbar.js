@@ -5,9 +5,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from "@mui/material/Button";
 import {logoutUser} from "../services/AuthService";
-import {useNavigate} from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import {IconButton} from "@mui/material";
+import {attachRouter} from "../services/CommonService";
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -77,21 +77,6 @@ class Navbar extends React.Component {
             </Box>
         );
     }
-}
-
-function attachRouter(Component) {
-    function ComponentWithRouter(props) {
-        let navigate = useNavigate(); // class components cannot use the useParams() hook, so we need a wrapping component;
-
-        return (
-            <Component
-                {...props}  // previous props
-                router = {{ navigate }} // router - attached prop;
-            />
-        );
-    }
-
-    return ComponentWithRouter;
 }
 
 export default attachRouter(Navbar);
