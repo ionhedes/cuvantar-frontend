@@ -41,7 +41,7 @@ class HomePage extends React.Component {
         return (
             <div className="Home">
                 <SearchableNavbar></SearchableNavbar>
-                <Grid container direction="column" spacing={5} alignItems="center">
+                <Grid container direction="column" spacing={5} alignItems="center" mb="1vh">
                     <Grid item container spacing={3} justifyContent="center" mt={5}>
                         <Grid item>
                             <HomepageCard name="Lessons" destination="/lessons" />

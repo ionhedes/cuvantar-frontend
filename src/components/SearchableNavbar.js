@@ -91,7 +91,7 @@ class SearchableNavbar extends React.Component {
     render() {
         return (
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+                <AppBar position="fixed">
                     <Toolbar>
                         <Typography
                             variant="h6"
@@ -125,6 +125,7 @@ class SearchableNavbar extends React.Component {
 
                     </Toolbar>
                 </AppBar>
+                <Toolbar />
             </Box>
         );
     }

@@ -60,7 +60,7 @@ class LessonsPage extends React.Component {
         }
 
         let lessonLayout = (
-            <Grid container direction="column">
+            <Grid container direction="column" mb="1vh">
                 <Grid item container spacing={5} justifyContent="center" mt="1vh">
                     <Grid item>
                         <LessonBox

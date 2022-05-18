@@ -9,17 +9,19 @@ class NavbarAuthScreen extends React.Component {
     render() {
         return (
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+                <AppBar position="fixed">
                     <Toolbar>
                         <Typography
                             variant="h6"
                             noWrap
                             component="div"
-                            sx={{ display: "flex", minWidth: "100vw", justifyContent: "center" }}
-                        >Cuvântar
+                            sx={{ display: "flex", width: "100%", justifyContent: "center" }}
+                        >
+                            Cuvântar
                         </Typography>
                     </Toolbar>
                 </AppBar>
+                <Toolbar />
             </Box>
         );
     }

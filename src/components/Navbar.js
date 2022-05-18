@@ -42,7 +42,7 @@ class Navbar extends React.Component {
     render() {
         return (
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+                <AppBar position="fixed">
                     <Toolbar>
                         <IconButton
                             size="large"
@@ -74,6 +74,7 @@ class Navbar extends React.Component {
 
                     </Toolbar>
                 </AppBar>
+                <Toolbar />
             </Box>
         );
     }

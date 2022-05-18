@@ -47,15 +47,15 @@ class SummaryPage extends React.Component {
         return (
             <div className="SummaryPage">
                 <Navbar />
-                <Grid container direction="column" alignItems="center" mt="1vh">
+                <Grid container direction="column" alignItems="center" mb="1vh">
                     <Grid item>
-                        <Typography variant="h3">Answered correctly</Typography>
+                        <Typography variant="h3" fontSize={{xs: "10vw", md: "3vw"}}>Answered correctly</Typography>
                     </Grid>
                     <Grid item>
                         { this.areCorrectCardsLoaded() ? (<FlashcardGrid cards={this.state.correct} />) : (<CircularProgress />) }
                     </Grid>
                     <Grid item>
-                        <Typography variant="h3">Answered incorrectly</Typography>
+                        <Typography variant="h3" fontSize={{xs: "10vw", md: "3vw"}}>Answered incorrectly</Typography>
                     </Grid>
                     <Grid item>
                         { this.areIncorrectCardsLoaded() ? (<FlashcardGrid cards={this.state.incorrect} />) : (<CircularProgress />) }

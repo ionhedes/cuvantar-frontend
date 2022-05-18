@@ -109,89 +109,91 @@ class AuthPage extends React.Component {
                     message={this.state.errorMessage}
                 />
                 <NavbarAuthScreen/>
-                <div style={{display: 'flex', minWidth: '100vw', minHeight: '80vh', justifyContent: 'center', alignItems: 'center'}}>
-                <Grid container direction='row' justifyContent='center'>
-                    <Box
-                        component="div"
-                        sx={{display: 'flex',
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            minWidth: '25vw',
-                            maxWidth: '25vw',
-                            backgroundColor: '#e0e0e0',
-                            borderRadius: '10px',
-                            padding: '20px',
-                            marginRight: '5vw'
-                        }}>
-                        <Grid container direction="column" alignItems='center' spacing='2vh'>
-                            <Grid item>
-                                <Typography
-                                    variant="h6"
-                                    noWrap
-                                    component="div"
-                                    sx={{ fontWeight: 'bold', minWidth: '10vw', textAlign: 'center'}}
-                                >REGISTER
-                                </Typography>
+                {/*<div className={classes.}*/}
+                <Grid container direction='row' justifyContent='center' spacing='2vw' minHeight='80vh' alignItems='center' mt={{xs: "1vh", md: "0vh"}}>
+                    <Grid item>
+                        <Box
+                            component="div"
+                            sx={{display: 'flex',
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                minWidth: { xs: '75vw', md: '25vw' },
+                                maxWidth: { xs: '75vw', md: '25vw' },
+                                backgroundColor: '#e0e0e0',
+                                borderRadius: '10px',
+                                padding: '20px',
+                            }}>
+                            <Grid container direction="column" alignItems='center' spacing='1vh'>
+                                <Grid item>
+                                    <Typography
+                                        variant="h6"
+                                        noWrap
+                                        component="div"
+                                        sx={{ fontWeight: 'bold', minWidth: '10vw', textAlign: 'center'}}
+                                    >REGISTER
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <TextField name="emailRegister" onChange={this.handleInputChange} label="Email" variant="standard" sx={{ minWidth: '20vw'}}/>
+                                </Grid>
+                                <Grid item>
+                                    <TextField name="usernameRegister" onChange={this.handleInputChange} label="Username" variant="standard" sx={{ minWidth: '20vw'}}/>
+                                </Grid>
+                                <Grid item>
+                                    <TextField name="passwordRegister" onChange={this.handleInputChange} label="Password" type="password" variant="standard" sx={{ minWidth: '20vw'}}/>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        onClick={this.onClickRegister}
+                                    >
+                                        Register now!
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <TextField name="emailRegister" onChange={this.handleInputChange} label="Email" variant="standard" sx={{ minWidth: '20vw'}}/>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Box
+                            component="div"
+                            sx={{display: 'flex',
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                minWidth: { xs: '75vw', md: '25vw' },
+                                maxWidth: { xs: '75vw', md: '25vw' },
+                                backgroundColor: '#e0e0e0',
+                                borderRadius: '10px',
+                                padding: '20px'
+                            }}>
+                            <Grid container direction="column" alignItems='center' spacing='2vh'>
+                                <Grid item>
+                                    <Typography
+                                        variant="h6"
+                                        noWrap
+                                        component="div"
+                                        sx={{ fontWeight: 'bold', minWidth: '10vw', textAlign: 'center', marginBottom: '3vh'}}
+                                    >LOGIN
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <TextField name="usernameLogin" onChange={this.handleInputChange} label="Username" variant="standard" sx={{ minWidth: '20vw'}}/>
+                                </Grid>
+                                <Grid item>
+                                    <TextField name="passwordLogin" onChange={this.handleInputChange} label="Password" type="password" variant="standard" sx={{ minWidth: '20vw'}}/>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        onClick={this.onClickLogin}
+                                    >
+                                        Login!
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <TextField name="usernameRegister" onChange={this.handleInputChange} label="Username" variant="standard" sx={{ minWidth: '20vw'}}/>
-                            </Grid>
-                            <Grid item>
-                                <TextField name="passwordRegister" onChange={this.handleInputChange} label="Password" type="password" variant="standard" sx={{ minWidth: '20vw'}}/>
-                            </Grid>
-                            <Grid item>
-                                <Button
-                                    variant="contained"
-                                    onClick={this.onClickRegister}
-                                >
-                                    Register now!
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Box
-                        component="div"
-                        sx={{display: 'flex',
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            minWidth: '25vw',
-                            maxWidth: '25vw',
-                            backgroundColor: '#e0e0e0',
-                            borderRadius: '10px',
-                            padding: '20px'
-                        }}>
-                        <Grid container direction="column" alignItems='center' spacing='2vh'>
-                            <Grid item>
-                                <Typography
-                                    variant="h6"
-                                    noWrap
-                                    component="div"
-                                    sx={{ fontWeight: 'bold', minWidth: '10vw', textAlign: 'center', marginBottom: '3vh'}}
-                                >LOGIN
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <TextField name="usernameLogin" onChange={this.handleInputChange} label="Username" variant="standard" sx={{ minWidth: '20vw'}}/>
-                            </Grid>
-                            <Grid item>
-                                <TextField name="passwordLogin" onChange={this.handleInputChange} label="Password" type="password" variant="standard" sx={{ minWidth: '20vw'}}/>
-                            </Grid>
-                            <Grid item>
-                                <Button
-                                    variant="contained"
-                                    onClick={this.onClickLogin}
-                                >
-                                    Login!
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Box>
+                        </Box>
+                    </Grid>
                 </Grid>
                 </div>
-            </div>
         );
     }
 }
