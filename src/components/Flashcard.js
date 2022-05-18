@@ -13,14 +13,18 @@ class Flashcard extends React.Component {
                 <Card variant="outlined">
                      <CardContent>
                           <Typography variant="h5" component="div">
-                              {this.props.word}
+                              {this.props.front}
                           </Typography>
                           <Typography variant="p" component="div">
-                              {this.props.translation}
+                              {this.props.back}
                           </Typography>
                      </CardContent>
                      <CardActions>
-                         <Button>Go to definition</Button>
+                         <Button
+                             onClick={() => this.props.onClick(this.props.idx)}
+                         >
+                             See details
+                         </Button>
                      </CardActions>
                 </Card>
             </Box>
