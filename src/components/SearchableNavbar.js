@@ -71,20 +71,9 @@ class SearchableNavbar extends React.Component {
     }
 
     handleLogout(event) {
-        logoutUser().then(res => {
-            if (res.ok) {
-                sessionStorage.removeItem("username");
-                sessionStorage.removeItem("token");
-
-                if (sessionStorage.getItem("lessons")) {
-                    sessionStorage.removeItem("lessons");
-                }
-                if (sessionStorage.getItem("reviews")) {
-                    sessionStorage.removeItem("reviews");
-                }
-
-                this.props.router.navigate('/')
-            }
+        logoutUser().then(() => {
+            sessionStorage.clear();
+            this.props.router.navigate('/');
         });
     }
 

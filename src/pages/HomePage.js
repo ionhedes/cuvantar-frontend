@@ -8,6 +8,7 @@ import {Link, Navigate} from "react-router-dom";
 import {isLoggedIn} from "../services/AuthService";
 import {convertReviewsToCards} from "../services/ReviewService";
 import {fetchMostRecentLessonsFromServer} from "../services/LessonService";
+import {attachRouter} from "../services/CommonService";
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -19,11 +20,18 @@ class HomePage extends React.Component {
     componentDidMount() {
         if (isLoggedIn()) {
             fetchMostRecentLessonsFromServer().then(
-                reviews => convertReviewsToCards(reviews).then(
-                    cards => {
-                        this.setState({ loaded:true, cards: cards });
+                reviews => {
+                    if (sessionStorage.getItem("sessionExpired")) {
+                        sessionStorage.clear();
+                        this.props.router.navigate("/");
                     }
-                )
+
+                    convertReviewsToCards(reviews).then(
+                        cards => {
+                            this.setState({ loaded:true, cards: cards });
+                        }
+                    )
+                }
             )
         }
     }
@@ -76,4 +84,4 @@ class HomePage extends React.Component {
     }
 }
 
-export default HomePage;
+export default attachRouter(HomePage);

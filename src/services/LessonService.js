@@ -14,7 +14,12 @@ export function fetchLessonsFromServer() {
     sessionStorage.removeItem("lessons")
 
     return fetch(`${baseUrl}/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
-        res => res.json()
+        res => {
+            if (!res.ok && res.status === 403) {
+                sessionStorage.setItem("sessionExpired", "true");
+            }
+            return res.json();
+        }
     ).then(
         data => {
             sessionStorage.setItem("lessons", JSON.stringify(data));
@@ -37,7 +42,12 @@ export function fetchMostRecentLessonsFromServer() {
     return fetch(`${baseUrl}/api/reviews?username=${
             encodeURIComponent(sessionStorage.getItem("username"))
         }&recent=true`, requestOptions).then(
-        res => res.json()
+        res => {
+            if (!res.ok && res.status === 403) {
+                sessionStorage.setItem("sessionExpired", "true");
+            }
+            return res.json();
+        }
     ).then(
         data => {
             return data;
@@ -63,6 +73,12 @@ export function finishLessonSession() {
             encodeURIComponent(sessionStorage.getItem("username"))
         }&cardId=${
             encodeURIComponent(card.id)
-        }`, requestOptions)
+        }`, requestOptions).then(
+            res => {
+                if (!res.ok && res.status === 403) {
+                    sessionStorage.setItem("sessionExpired", "true");
+                }
+            }
+        )
     });
 }

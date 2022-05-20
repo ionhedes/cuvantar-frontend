@@ -18,12 +18,21 @@ class SummaryPage extends React.Component {
 
         if (!this.wasCalledWithoutReviews()) {
             filterFinishedReviews(this.props.router.location.state.completedReviews, true).then(cards => {
+                if (sessionStorage.getItem("sessionExpired")) {
+                    sessionStorage.clear();
+                    this.props.router.navigate("/");
+                }
                 this.setState({ loadedCorrectCards: true, correct: cards });
             })
             filterFinishedReviews(this.props.router.location.state.completedReviews, false).then(cards => {
+                if (sessionStorage.getItem("sessionExpired")) {
+                    sessionStorage.clear();
+                    this.props.router.navigate("/");
+                }
                 this.setState({ loadedIncorrectCards: true, incorrect: cards });
             })
         }
+
     }
 
     areCorrectCardsLoaded() {

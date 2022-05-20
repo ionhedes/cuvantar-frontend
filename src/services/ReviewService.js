@@ -16,8 +16,14 @@ export function fetchReviewsFromServer() {
     sessionStorage.removeItem("reviews");
     sessionStorage.removeItem("completedReviews");
 
+
     return fetch(`${baseUrl}/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
-        res => res.json()
+        res => {
+            if (!res.ok && res.status === 403) {
+                sessionStorage.setItem("sessionExpired", true);
+            }
+            return res.json();
+        }
     ).then(
         data => {
             sessionStorage.setItem("reviews", JSON.stringify(data));
@@ -58,7 +64,11 @@ export function sendReviewResults(answers) {
                 encodeURIComponent(reviews[idx].card_id)
             }&passed=${
             encodeURIComponent(ans)
-            }`, requestOptions)
+            }`, requestOptions).then(res => {
+                if (!res.ok && res.status === 403) {
+                    sessionStorage.setItem("sessionExpired", "true");
+                }
+        })
     });
 
     return reviews.slice(0, answers.length);

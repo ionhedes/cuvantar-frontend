@@ -26,6 +26,12 @@ class LessonsPage extends React.Component {
         if (isLoggedIn()) {
             fetchLessonsFromServer().then(
                 lessons => {
+
+                    if (sessionStorage.getItem("sessionExpired")) {
+                        sessionStorage.clear();
+                        this.props.router.navigate("/");
+                    }
+
                     this.lessons = lessons;
                     this.setState({ loaded: true});
                     if (!this.isLessonQueueEmpty()) {
@@ -50,6 +56,10 @@ class LessonsPage extends React.Component {
 
     finishLessons() {
         finishLessonSession();
+        if (sessionStorage.getItem("sessionExpired")) {
+            sessionStorage.clear();
+            this.props.router.navigate("/");
+        }
         this.props.router.navigate("/home");
     }
 
