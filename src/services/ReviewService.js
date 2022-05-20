@@ -1,5 +1,7 @@
 import {getFlashcard} from "./FlashcardService";
 
+const baseUrl = process.env.REACT_APP_SERVER_URL
+
 export function fetchReviewsFromServer() {
     const requestOptions = {
         method: 'GET',
@@ -14,7 +16,7 @@ export function fetchReviewsFromServer() {
     sessionStorage.removeItem("reviews");
     sessionStorage.removeItem("completedReviews");
 
-    return fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+    return fetch(`${baseUrl}/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
         data => {
@@ -50,7 +52,7 @@ export function sendReviewResults(answers) {
 
     answers.forEach((ans, idx) => {
         reviews[idx].result = ans;
-        fetch(`http://localhost:3000/api/reviews?username=${
+        fetch(`${baseUrl}/api/reviews?username=${
                 encodeURIComponent(sessionStorage.getItem("username"))
             }&cardId=${
                 encodeURIComponent(reviews[idx].card_id)

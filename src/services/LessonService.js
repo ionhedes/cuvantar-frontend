@@ -1,3 +1,5 @@
+const baseUrl = process.env.REACT_APP_SERVER_URL
+
 export function fetchLessonsFromServer() {
     const requestOptions = {
         method: 'GET',
@@ -11,7 +13,7 @@ export function fetchLessonsFromServer() {
 
     sessionStorage.removeItem("lessons")
 
-    return fetch(`http://localhost:3000/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+    return fetch(`${baseUrl}/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
         data => {
@@ -32,7 +34,7 @@ export function fetchMostRecentLessonsFromServer() {
         mode: 'cors'
     };
 
-    return fetch(`http://localhost:3000/api/reviews?username=${
+    return fetch(`${baseUrl}/api/reviews?username=${
             encodeURIComponent(sessionStorage.getItem("username"))
         }&recent=true`, requestOptions).then(
         res => res.json()
@@ -57,7 +59,7 @@ export function finishLessonSession() {
     };
 
     completedLessons.forEach((card) => {
-        fetch(`http://localhost:3000/api/reviews?username=${
+        fetch(`${baseUrl}/api/reviews?username=${
             encodeURIComponent(sessionStorage.getItem("username"))
         }&cardId=${
             encodeURIComponent(card.id)
