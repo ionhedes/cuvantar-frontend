@@ -1,0 +1,7 @@
+{
+  "name": "cuvantar",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

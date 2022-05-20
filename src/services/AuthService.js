@@ -5,7 +5,7 @@ export function registerUser(user){
         body: JSON.stringify(user),
         mode: 'cors'
     };
-    return fetch('http://localhost:3000/api/registration', requestOptions);
+    return fetch(`${process.env.REACT_APP_SERVER_URL}/api/registration`, requestOptions);
 }
 
 export function loginUser(creds){
@@ -14,7 +14,7 @@ export function loginUser(creds){
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic ' + btoa(process.env.REACT_APP_API_CREDS)},
         mode: 'cors'
     };
-    return fetch(`http://localhost:3000/api/login?username=${encodeURIComponent(creds.username)}&password=${encodeURIComponent(creds.password)}`, requestOptions);
+    return fetch(`${process.env.REACT_APP_SERVER_URL}/api/login?username=${encodeURIComponent(creds.username)}&password=${encodeURIComponent(creds.password)}`, requestOptions);
 }
 
 export function logoutUser() {
@@ -27,7 +27,7 @@ export function logoutUser() {
         },
         mode: 'cors'
     };
-    return fetch(`http://localhost:3000/api/logout?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions);
+    return fetch(`${process.env.REACT_APP_SERVER_URL}/api/logout?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions);
 }
 
 export function isLoggedIn() {

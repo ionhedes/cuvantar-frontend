@@ -14,7 +14,7 @@ export function fetchReviewsFromServer() {
     sessionStorage.removeItem("reviews");
     sessionStorage.removeItem("completedReviews");
 
-    return fetch(`http://localhost:3000/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+    return fetch(`${process.env.REACT_APP_SERVER_URL}/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
         res => res.json()
     ).then(
         data => {
@@ -50,7 +50,7 @@ export function sendReviewResults(answers) {
 
     answers.forEach((ans, idx) => {
         reviews[idx].result = ans;
-        fetch(`http://localhost:3000/api/reviews?username=${
+        fetch(`${process.env.REACT_APP_SERVER_URL}/api/reviews?username=${
                 encodeURIComponent(sessionStorage.getItem("username"))
             }&cardId=${
                 encodeURIComponent(reviews[idx].card_id)

@@ -8,6 +8,6 @@ export async function getFlashcard(id) {
         mode: 'cors'
     };
 
-    let response = await fetch(`http://localhost:3000/api/cards/${encodeURIComponent(id)}`, requestOptions);
+    let response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/cards/${encodeURIComponent(id)}`, requestOptions);
     return await response.json();
 }
