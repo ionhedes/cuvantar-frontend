@@ -1,3 +1,5 @@
+const baseUrl = process.env.REACT_APP_SERVER_URL
+
 export function fetchLessonsFromServer() {
     const requestOptions = {
         method: 'GET',
@@ -11,8 +13,13 @@ export function fetchLessonsFromServer() {
 
     sessionStorage.removeItem("lessons")
 
-    return fetch(`http://localhost:3000/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
-        res => res.json()
+    return fetch(`${baseUrl}/api/lessons?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+        res => {
+            if (!res.ok && res.status === 403) {
+                sessionStorage.setItem("sessionExpired", "true");
+            }
+            return res.json();
+        }
     ).then(
         data => {
             sessionStorage.setItem("lessons", JSON.stringify(data));
@@ -32,10 +39,15 @@ export function fetchMostRecentLessonsFromServer() {
         mode: 'cors'
     };
 
-    return fetch(`http://localhost:3000/api/reviews?username=${
+    return fetch(`${baseUrl}/api/reviews?username=${
             encodeURIComponent(sessionStorage.getItem("username"))
         }&recent=true`, requestOptions).then(
-        res => res.json()
+        res => {
+            if (!res.ok && res.status === 403) {
+                sessionStorage.setItem("sessionExpired", "true");
+            }
+            return res.json();
+        }
     ).then(
         data => {
             return data;
@@ -57,10 +69,16 @@ export function finishLessonSession() {
     };
 
     completedLessons.forEach((card) => {
-        fetch(`http://localhost:3000/api/reviews?username=${
+        fetch(`${baseUrl}/api/reviews?username=${
             encodeURIComponent(sessionStorage.getItem("username"))
         }&cardId=${
             encodeURIComponent(card.id)
-        }`, requestOptions)
+        }`, requestOptions).then(
+            res => {
+                if (!res.ok && res.status === 403) {
+                    sessionStorage.setItem("sessionExpired", "true");
+                }
+            }
+        )
     });
 }
