@@ -68,7 +68,7 @@ class SearchableNavbar extends React.Component {
 
     handleSearch(event) {
         if (event.key === "Enter" && this.state.value !== "") {
-            alert("You searched " + this.state.value + " on the card's " + this.state.alignment);
+            this.props.router.navigate(`/search/${this.state.value}/${this.state.alignment}`);
         }
     }
 

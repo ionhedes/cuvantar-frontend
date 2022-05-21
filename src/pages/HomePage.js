@@ -26,7 +26,7 @@ class HomePage extends React.Component {
                         this.props.router.navigate("/");
                     }
 
-                    convertReviewsToCards(reviews).then(
+                    convertReviewsToCards(reviews, 10).then(
                         cards => {
                             this.setState({ loaded:true, cards: cards });
                         }
