@@ -21,7 +21,7 @@ root.render(
               <Route path="/home" element={<HomePage />} />
               <Route path="/lessons" element={<LessonsPage />} />
               <Route path="/search" element={<SearchResultsPage />}>
-                <Route path=":keyword/:side" element={<SearchResultsPage />} />
+                <Route path=":matcher/:side" element={<SearchResultsPage />} />
               </Route>
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/summary" element={<SummaryPage />} />
