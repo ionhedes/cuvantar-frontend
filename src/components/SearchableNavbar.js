@@ -115,7 +115,7 @@ class SearchableNavbar extends React.Component {
                             value={this.state.alignment}
                             exclusive
                             onChange={this.handleChange}
-                            sx={{backgroundColor: "rgba(255,255,255,0.15)"}}
+                            sx={{backgroundColor: "rgba(255,255,255,0.15)", marginRight: "1vw"}}
                         >
                             <ToggleButton value="front" sx={{color: "#ffffff"}}>Front</ToggleButton>
                             <ToggleButton value="back" sx={{color: "#ffffff"}}>Back</ToggleButton>

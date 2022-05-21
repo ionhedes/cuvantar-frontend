@@ -24,6 +24,6 @@ export async function getAllFlashcards() {
         mode: 'cors'
     };
 
-    let response = await fetch(`http://localhost:3000/api/cards`, requestOptions);
+    let response = await fetch(`${baseUrl}/api/cards`, requestOptions);
     return await response.json();
 }

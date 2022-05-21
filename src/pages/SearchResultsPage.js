@@ -7,8 +7,6 @@ import FlashcardGrid from '../components/FlashcardGrid';
 import {CircularProgress, Grid, Typography} from "@mui/material";
 import {attachRouter} from "../services/CommonService";
 
-// this.props.router.params.cardId
-
 class SearchResultsPage extends React.Component {
     constructor(props) {
         super(props);
@@ -19,14 +17,12 @@ class SearchResultsPage extends React.Component {
     componentDidMount() {
         if (isLoggedIn()) {
             getAllFlashcards().then( cards => {
-                // const field_to_match = this.props.router.params.side;
-                // const matcher = this.props.router.params.keyword;
-                // console.log(field_to_match)
-                // console.log(matcher)
-                // const cards_filtered = cards.filter(card => {
-                //     card[field_to_match].includes(matcher);
-                // })
-                this.setState({ loaded:true, cards: cards });
+                const side = this.props.router.params.side;
+                const matcher = this.props.router.params.matcher;
+                const cards_filtered = cards.filter(function (card) {
+                    return card[side].includes(matcher)
+                });
+                this.setState({ loaded:true, cards: cards_filtered });
             })
         }
     }
@@ -42,11 +38,11 @@ class SearchResultsPage extends React.Component {
 
         return (
             <div className="SearchResults">
-                <Navbar></Navbar>
+                <Navbar/>
                 <Grid container direction="column" spacing={5} alignItems="center" mb="1vh">
                     <Grid item container spacing={3} justifyContent="center" mt={5}>
                         <Grid item container justifyContent="center">
-                            <Typography variant="h4">Search results for {this.props.router.params.cardId}:</Typography>
+                            <Typography variant="h4">Search results for '{this.props.router.params.matcher}' ({this.props.router.params.side} side):</Typography>
                         </Grid>
                         <Grid item>
                             { this.areRecentCardsLoaded() ? (<FlashcardGrid cards={this.state.cards} />) : (<CircularProgress />) }
