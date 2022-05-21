@@ -26,7 +26,7 @@ class HomePage extends React.Component {
                         this.props.router.navigate("/");
                     }
 
-                    convertReviewsToCards(reviews).then(
+                    convertReviewsToCards(reviews, 10).then(
                         cards => {
                             this.setState({ loaded:true, cards: cards });
                         }
@@ -68,7 +68,7 @@ class HomePage extends React.Component {
                     </Grid>
                     <Grid item container spacing={2} justifyContent="center">
                         <Grid item>
-                            <Link to="/cards" style={{ textDecoration: 'none' }}>
+                            <Link to="/cards/studied" style={{ textDecoration: 'none' }}>
                                 <Button variant="contained">See studied cards</Button>
                             </Link>
                         </Grid>

@@ -1,12 +1,13 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import {isLoggedIn} from "../services/AuthService";
-import {getAllFlashcards} from "../services/FlashcardService"
 import {Navigate} from "react-router-dom";
 import FlashcardGrid from '../components/FlashcardGrid';
 import {CircularProgress, Grid, Typography} from "@mui/material";
+import {convertReviewsToCards} from "../services/ReviewService";
+import {fetchMostRecentLessonsFromServer} from "../services/LessonService";
 
-class AllFlashcardsPage extends React.Component {
+class StudiedFlashcardsPage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -15,9 +16,13 @@ class AllFlashcardsPage extends React.Component {
 
     componentDidMount() {
         if (isLoggedIn()) {
-            getAllFlashcards().then( cards => {
-                this.setState({ loaded:true, cards: cards });
-            })
+            fetchMostRecentLessonsFromServer().then(
+                reviews => convertReviewsToCards(reviews).then(
+                    cards => {
+                        this.setState({ loaded:true, cards: cards });
+                    }
+                )
+            )
         }
     }
 
@@ -36,7 +41,7 @@ class AllFlashcardsPage extends React.Component {
                 <Grid container direction="column" spacing={5} alignItems="center" mb="1vh">
                     <Grid item container spacing={3} justifyContent="center" mt={5}>
                         <Grid item container justifyContent="center">
-                            <Typography variant="h4">All available flashcards:</Typography>
+                            <Typography variant="h4">All flashcards you have studied:</Typography>
                         </Grid>
                         <Grid item>
                             { this.areRecentCardsLoaded() ? (<FlashcardGrid cards={this.state.cards} />) : (<CircularProgress />) }
@@ -48,4 +53,4 @@ class AllFlashcardsPage extends React.Component {
     }
 }
 
-export default AllFlashcardsPage;
+export default StudiedFlashcardsPage;
