@@ -1,5 +1,7 @@
 import {getFlashcard} from "./FlashcardService";
 
+const baseUrl = process.env.REACT_APP_SERVER_URL
+
 export function fetchReviewsFromServer() {
     const requestOptions = {
         method: 'GET',
@@ -14,8 +16,14 @@ export function fetchReviewsFromServer() {
     sessionStorage.removeItem("reviews");
     sessionStorage.removeItem("completedReviews");
 
-    return fetch(`${process.env.REACT_APP_SERVER_URL}/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
-        res => res.json()
+
+    return fetch(`${baseUrl}/api/reviews?username=${encodeURIComponent(sessionStorage.getItem("username"))}`, requestOptions).then(
+        res => {
+            if (!res.ok && res.status === 403) {
+                sessionStorage.setItem("sessionExpired", true);
+            }
+            return res.json();
+        }
     ).then(
         data => {
             sessionStorage.setItem("reviews", JSON.stringify(data));
@@ -24,11 +32,13 @@ export function fetchReviewsFromServer() {
     );
 }
 
-export async function convertReviewsToCards(reviews) {
+export async function convertReviewsToCards(reviews, limit=100) {
     let cards = [];
-
+    let i = 0;
     for (const review of reviews) {
+        i += 1;
         cards = cards.concat(await getFlashcard(review.card_id));
+        if(i >= limit) break;
     }
 
     return cards;
@@ -50,13 +60,17 @@ export function sendReviewResults(answers) {
 
     answers.forEach((ans, idx) => {
         reviews[idx].result = ans;
-        fetch(`${process.env.REACT_APP_SERVER_URL}/api/reviews?username=${
+        fetch(`${baseUrl}/api/reviews?username=${
                 encodeURIComponent(sessionStorage.getItem("username"))
             }&cardId=${
                 encodeURIComponent(reviews[idx].card_id)
             }&passed=${
             encodeURIComponent(ans)
-            }`, requestOptions)
+            }`, requestOptions).then(res => {
+                if (!res.ok && res.status === 403) {
+                    sessionStorage.setItem("sessionExpired", "true");
+                }
+        })
     });
 
     return reviews.slice(0, answers.length);

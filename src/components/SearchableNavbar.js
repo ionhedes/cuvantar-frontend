@@ -9,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
 import {logoutUser} from "../services/AuthService";
 import {attachRouter} from "../services/CommonService";
+import {ToggleButton, ToggleButtonGroup} from "@mui/lab";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -53,11 +54,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 class SearchableNavbar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: ''};
+        this.state = {value: '', alignment: 'front'};
 
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleOnChange(event) {
@@ -66,26 +68,21 @@ class SearchableNavbar extends React.Component {
 
     handleSearch(event) {
         if (event.key === "Enter" && this.state.value !== "") {
-            alert("You searched " + this.state.value);
+            this.props.router.navigate(`/search/${this.state.value}/${this.state.alignment}`);
         }
     }
 
     handleLogout(event) {
-        logoutUser().then(res => {
-            if (res.ok) {
-                sessionStorage.removeItem("username");
-                sessionStorage.removeItem("token");
-
-                if (sessionStorage.getItem("lessons")) {
-                    sessionStorage.removeItem("lessons");
-                }
-                if (sessionStorage.getItem("reviews")) {
-                    sessionStorage.removeItem("reviews");
-                }
-
-                this.props.router.navigate('/')
-            }
+        logoutUser().then(() => {
+            sessionStorage.clear();
+            this.props.router.navigate('/');
         });
+    }
+
+    handleChange = (event, newAlignment) => {
+        this.setState({
+            alignment: newAlignment
+        })
     }
 
     render() {
@@ -113,6 +110,16 @@ class SearchableNavbar extends React.Component {
                                 onKeyDown={this.handleSearch}
                             />
                         </Search>
+                        <ToggleButtonGroup
+                            color="warning"
+                            value={this.state.alignment}
+                            exclusive
+                            onChange={this.handleChange}
+                            sx={{backgroundColor: "rgba(255,255,255,0.15)", marginRight: "1vw"}}
+                        >
+                            <ToggleButton value="front" sx={{color: "#ffffff"}}>Front</ToggleButton>
+                            <ToggleButton value="back" sx={{color: "#ffffff"}}>Back</ToggleButton>
+                        </ToggleButtonGroup>
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: 'flex', whiteSpace: "nowrap" }}>
                             <Button variant="contained"

@@ -25,12 +25,20 @@ class ReviewPage extends React.Component {
     componentDidMount() {
         if (isLoggedIn()) {
             fetchReviewsFromServer().then(
-                reviews => convertReviewsToCards(reviews).then(
-                    cards => {
-                        this.reviewGenerator = createGenerator(cards);
-                        this.setState({loaded: true, currentReview: this.reviewGenerator.next()});
+                reviews => {
+
+                    if (sessionStorage.getItem("sessionExpired")) {
+                        sessionStorage.clear();
+                        this.props.router.navigate("/");
                     }
-                )
+
+                    convertReviewsToCards(reviews).then(
+                        cards => {
+                            this.reviewGenerator = createGenerator(cards);
+                            this.setState({loaded: true, currentReview: this.reviewGenerator.next()});
+                        }
+                    )
+                }
             )
         }
     }
@@ -60,6 +68,10 @@ class ReviewPage extends React.Component {
 
     finishReviews(event) {
         const completedReviews = sendReviewResults(this.answers);
+        if (sessionStorage.getItem("sessionExpired")) {
+            sessionStorage.clear();
+            this.props.router.navigate("/");
+        }
         this.props.router.navigate("/summary", { state: { completedReviews } });
     }
 
