@@ -20,7 +20,7 @@ class SearchResultsPage extends React.Component {
                 const side = this.props.router.params.side;
                 const matcher = this.props.router.params.matcher;
                 const cards_filtered = cards.filter(function (card) {
-                    return card[side].includes(matcher)
+                    return card[side].toLowerCase().includes(matcher.toLowerCase())
                 });
                 this.setState({ loaded:true, cards: cards_filtered });
             })

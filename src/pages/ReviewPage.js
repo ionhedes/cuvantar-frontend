@@ -56,7 +56,7 @@ class ReviewPage extends React.Component {
     }
 
     sendAnswer(event) {
-        this.answers = this.answers.concat(this.state.value === this.state.currentReview.value.back);
+        this.answers = this.answers.concat(this.state.value.toLowerCase() === this.state.currentReview.value.back.toLowerCase());
 
         let nextReview = this.reviewGenerator.next();
         if (nextReview.done === true) {
